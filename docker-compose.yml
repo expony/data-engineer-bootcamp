@@ -24,6 +24,12 @@ services:
     volumes:
       - rustfs_data:/data
 
+  metabase:
+    image: metabase/metabase:latest
+    container_name: bootcamp_metabase
+    ports:
+      - "3000:3000"    
+
 volumes:
   postgres_data:
   rustfs_data:
