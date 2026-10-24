@@ -3,21 +3,28 @@ import time
 from extract import veri_cek
 from transform import veriyi_temizle
 from load_db import veritabanina_kaydet
+from load_datalake import datalake_yukle
 
-def etl_job():
-    print("\n--- OTOMATİK ETL TETİKLENDİ ---")
-    # E, T ve L aşamalarını sırayla çağırıyoruz
+def tam_boru_hatti():
+    print("\n--- GELİŞMİŞ VERİ BORU HATTI TETİKLENDİ ---")
+    
+    # 1. EXTRACT: Veriyi kaynaktan çek
     ham_veri = veri_cek()
+    
+    # 2. LOAD (Data Lake): Orijinal veriyi güvene al
+    datalake_yukle(ham_veri)
+    
+    # 3. TRANSFORM: İhtiyacımız olanları cımbızla
     temiz_veri = veriyi_temizle(ham_veri)
+    
+    # 4. LOAD (Data Warehouse/DB): Analiz için temiz veriyi tabloya yaz
     veritabanina_kaydet(temiz_veri)
 
-# Test amaçlı görevi her 10 saniyede bir çalışacak şekilde kuruyoruz.
-# Gerçek bir senaryoda bu: schedule.every().day.at("03:00").do(etl_job) olurdu.
-schedule.every(10).seconds.do(etl_job)
+# Test için 10 saniyede bir çalıştırıyoruz
+schedule.every(10).seconds.do(tam_boru_hatti)
 
-print("Orkestratör devrede. Görev bekleniyor... (Durdurmak için: Ctrl+C)")
+print("Sistem dinlemede... (Durdurmak için Ctrl+C)")
 
-# Sonsuz döngü ile programı ayakta tutuyoruz
 while True:
     schedule.run_pending()
     time.sleep(1)

@@ -9,7 +9,7 @@ def veritabanina_kaydet(temiz_veri):
         dbname="bootcamp_db",
         user="admin",
         password="admin",
-        port=5432
+        port=5433
     )
     
     # 2. İmleç (cursor) oluşturuyoruz. Bu, SQL komutlarımızı veri tabanına taşıyan kuryemizdir.
